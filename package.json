@@ -1,6 +1,6 @@
 {
   "name": "@matiboux/keygenlib.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "KeyGenLib.js is an open source password generator JavaScript library.",
   "main": "KeyGenLib.js",
   "scripts": {
