@@ -10,10 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/matiboux/KeyGenJS-Lib.git"
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "author": "Matiboux <matiboux@gmail.com> (https://matiboux.me/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/matiboux/KeyGenJS-Lib/issues"
+    "url": "https://github.com/matiboux/KeyGenLib.js/issues"
   },
-  "homepage": "https://github.com/matiboux/KeyGenJS-Lib#readme"
+  "homepage": "https://github.com/matiboux/KeyGenLib.js#readme"
 }
