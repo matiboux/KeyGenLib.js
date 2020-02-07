@@ -1,4 +1,4 @@
-# KeyGenLib.js v0.2.0
+# KeyGenLib.js v1.0.0
 
 **KeyGenLib.js** is an open source password generator JavaScript library.  
 This software has been initially made for the [KeyGen Windows App](https://www.microsoft.com/store/apps/9n1qncrnx6pb).
@@ -29,7 +29,7 @@ console.log(keygen); // Print the generated keygen
 
 ### License
 
-Copyright (c) 2017 Matiboux (Mathieu Guérin) ([matiboux.me](https://matiboux.me/))  
+Copyright (c) 2017-2020 Matiboux (Mathieu Guérin) ([matiboux.me](https://matiboux.me/))  
 *You'll find a copy of the MIT LICENSE in the LICENSE file.*
 
 **Additional notes:**

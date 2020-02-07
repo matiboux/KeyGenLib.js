@@ -1,12 +1,12 @@
 ﻿/*\
 |*|  ---------------------------
-|*|  --- [  KeyGenLib.js  ] ---
-|*|  --- [   BETA: 0.2.0   ] ---
+|*|  --- [  KeyGenLib.js   ] ---
+|*|  --- [    v1.0.0       ] ---
 |*|  ---------------------------
 |*|
 |*|  KeyGenLib.js is an open source password generator JavaScript library.
 |*|
-|*|  Copyright (C) 2017 Matiboux (Mathieu Guérin)
+|*|  Copyright (C) 2017-2020 Matiboux (Mathieu Guérin)
 |*|  You'll find a copy of the MIT LICENSE in the LICENSE file.
 |*|  Please see the README.md file for more infos!
 |*|
@@ -20,12 +20,12 @@
 |*|    Github repository: https://github.com/matiboux/KeyGen
 |*|
 |*|  Releases date:
-|*|    BETA: January 1st, 2017
+|*|  - BETA: January 1st, 2017
 |*|    * Initial development phase
-|*|    * [version 0.1]:
-|*|              (0.1.0): January 12th, 2017
-|*|    * [version 0.2]:
-|*|              (0.2.0): ...
+|*|    * Version 0.1.0: January 12th, 2017
+|*|    * Version 0.2.0: February 7th, 2020
+|*|  - RELEASE:
+|*|    * Version 1.0.0: February 7th, 2020
 \*/
 
 class KeygenLib {
