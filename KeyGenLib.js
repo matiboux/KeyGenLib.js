@@ -76,10 +76,17 @@ class KeygenLib {
         return this.#_errorInfo;
     }
 
+    // *** Constructor
+
+    constructor(numeric, lowercase, uppercase, special, length, redundancy) {
+        this.setParameters(numeric, lowercase, uppercase, special, length, redundancy);
+    }
+
     // *** Methods
 
     // Set Keygen generation parameters
-    setParameters(numeric, lowercase, uppercase, special, length, redundancy) {
+    setParameters(numeric = true, lowercase = true, uppercase = true,
+                  special = false, length = 12, redundancy = true) {
         if (typeof numeric === 'object') {
             const parameters = numeric;
 
@@ -122,11 +129,11 @@ class KeygenLib {
             return false;
         }
 
-        if (!this.parameters.redundancy && this.parameters.length > charactersAllowed.length) KeygenLib._parameters.redundancy = true;
+        if (!this.parameters.redundancy && this.parameters.length > charactersAllowed.length)
+            this.parameters.redundancy = true;
 
         let keygen = "";
         while (keygen.length < this.parameters.length) {
-            //var randomCharacter = substr(charactersAllowed, mt_rand(0, charactersAllowed.length - 1), 1);
             const randomCharacter = charactersAllowed[this.randomNumber(0, charactersAllowed.length - 1)];
 
             if (this.parameters.redundancy || keygen.indexOf(randomCharacter) < 0)
@@ -135,16 +142,17 @@ class KeygenLib {
 
         if (keygen === "") {
             this.#_errorInfo = {
-                code: '03',
+                code: 3,
                 message: 'Generated keygen empty'
             };
-            return false;
+        }
+        else {
+            this.#_errorInfo = {
+                code: 0,
+                message: 'No error'
+            };
         }
 
-        this.#_errorInfo = {
-            code: '00',
-            message: 'No error'
-        };
         this.#_lastUsedParameters = this.parameters;
         return keygen;
     }
