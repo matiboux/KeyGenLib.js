@@ -10,17 +10,17 @@ This software has been initially made for the [KeyGen Windows App](https://www.m
 *Wondering how to get started?* Here's an example code:
 ```
 // This example uses the default settings:
-var KeygenFormData = {
+var KeygenParameters = {
 	numeric: true,
 	lowercase: true,
 	uppercase: true,
 	special: false,
 	length: 12,
-	redundancy: false
+	redundancy: true
 }
 
-KeygenLib.setParameters(KeygenFormData);
-var keygen = KeygenLib.generateKeygen();
+const KeyGen = new KeyGenLib(KeygenParameters );
+const keygen = KeyGen.generateKeygen();
 
 console.log(keygen); // Print the generated keygen
 ```
