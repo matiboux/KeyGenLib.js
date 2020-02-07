@@ -32,14 +32,14 @@ class KeygenLib {
 
     // *** Public fields & properties
 
-    // Keygen generation parameters
+    // KeyGen Active Parameters
     parameters = {
         numeric: true,
         lowercase: true,
         uppercase: true,
         special: false,
         length: 12,
-        redundancy: false
+        redundancy: true
     };
 
     // *** Private fields & properties
@@ -61,10 +61,16 @@ class KeygenLib {
         return this.#_characterSets;
     }
 
+    // Archived state for default parameters
+    #_defaultParameters = {...this.parameters};
+    get defaultParameters() {
+        return this.#_defaultParameters;
+    }
+
     // Archived state for last used parameters
-    #_lastUsedParameters = this.parameters;
-    get lastUsedParameters() {
-        return this.#_lastUsedParameters;
+    #_lastParameters = {...this.parameters};
+    get lastParameters() {
+        return this.#_lastParameters;
     }
 
     // Error information
@@ -85,8 +91,7 @@ class KeygenLib {
     // *** Methods
 
     // Set Keygen generation parameters
-    setParameters(numeric = true, lowercase = true, uppercase = true,
-                  special = false, length = 12, redundancy = true) {
+    setParameters(numeric, lowercase, uppercase, special, length, redundancy) {
         if (typeof numeric === 'object') {
             const parameters = numeric;
 
@@ -98,12 +103,17 @@ class KeygenLib {
             redundancy = parameters.redundancy;
         }
 
-        this.parameters.numeric = !!numeric;
-        this.parameters.lowercase = !!lowercase;
-        this.parameters.uppercase = !!uppercase;
-        this.parameters.special = !!special;
-        this.parameters.length = length;
-        this.parameters.redundancy = !!redundancy;
+        this.parameters.numeric = typeof numeric !== "undefined" ? !!numeric : this.#_lastParameters.numeric;
+        this.parameters.lowercase = typeof lowercase !== "undefined" ? !!lowercase : this.#_lastParameters.lowercase;
+        this.parameters.uppercase = typeof uppercase !== "undefined" ? !!uppercase : this.#_lastParameters.uppercase;
+        this.parameters.special = typeof special !== "undefined" ? !!special : this.#_lastParameters.special;
+        this.parameters.length = typeof length !== "undefined" ? length : this.#_lastParameters.length;
+        this.parameters.redundancy = typeof redundancy !== "undefined" ? !!redundancy : this.#_lastParameters.redundancy;
+    }
+
+    // Reset parameters
+    resetParameters() {
+        this.parameters = {...this.#_defaultParameters};
     }
 
     // Generate a Keygen
@@ -145,15 +155,14 @@ class KeygenLib {
                 code: 3,
                 message: 'Generated keygen empty'
             };
-        }
-        else {
+        } else {
             this.#_errorInfo = {
                 code: 0,
                 message: 'No error'
             };
         }
 
-        this.#_lastUsedParameters = this.parameters;
+        this.#_lastParameters = {...this.parameters};
         return keygen;
     }
 
