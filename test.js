@@ -34,9 +34,7 @@ console.log("Parameters for a CD-key component:");
 console.log("> " + KeyGen.generateKeygen());
 console.log();
 
-parameters = {};
-KeyGen.setParameters(parameters);
-console.log(parameters);
+KeyGen.resetParameters();
 console.log("Restoring the default parameters:");
 console.log("> " + KeyGen.generateKeygen());
 console.log();
