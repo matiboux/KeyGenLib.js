@@ -33,14 +33,7 @@ class KeygenLib {
     // *** Public fields & properties
 
     // KeyGen Active Parameters
-    parameters = {
-        numeric: true,
-        lowercase: true,
-        uppercase: true,
-        special: false,
-        length: 12,
-        redundancy: true
-    };
+    parameters;
 
     // *** Private fields & properties
 
@@ -62,13 +55,20 @@ class KeygenLib {
     }
 
     // Archived state for default parameters
-    #_defaultParameters = {...this.parameters};
+    #_defaultParameters = {
+        numeric: true,
+        lowercase: true,
+        uppercase: true,
+        special: false,
+        length: 12,
+        redundancy: true
+    };
     get defaultParameters() {
         return this.#_defaultParameters;
     }
 
     // Archived state for last used parameters
-    #_lastParameters = {...this.parameters};
+    #_lastParameters = {...this.#_defaultParameters};
     get lastParameters() {
         return this.#_lastParameters;
     }
