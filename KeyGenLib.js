@@ -1,71 +1,100 @@
 ﻿/*\
 |*|  ---------------------------
-|*|  --- [  Keygen JS Lib  ] ---
-|*|  --- [   BETA: 0.1.0   ] ---
+|*|  --- [  KeyGenLib.js  ] ---
+|*|  --- [   BETA: 0.2.0   ] ---
 |*|  ---------------------------
-|*|  
-|*|  Keygen Lib is the official password genrator library for KeyGen and Oli
-|*|  Keygen JS Lib is the JS version of KeyGen Lib.
-|*|  Copyright (C) 2015 Mathieu "Matiboux" Guérin
-|*|  
-|*|  KeyGen is an open source password generator service.
-|*|  Oli is an open source PHP Framework (created by Matiboux - https://oliframework.github.io/Oli/).
-|*|  
-|*|  Copyright (C) 2017 Mathieu Guérin (aka "Matiboux")
-|*|  You'll find a copy of the MIT LICENSE in the LICENSE file
+|*|
+|*|  KeyGenLib.js is an open source password generator JavaScript library.
+|*|
+|*|  Copyright (C) 2017 Matiboux (Mathieu Guérin)
+|*|  You'll find a copy of the MIT LICENSE in the LICENSE file.
 |*|  Please see the README.md file for more infos!
-|*|  
+|*|
 |*|  --- --- ---
-|*|  
-|*|  Developer: Matiboux
-|*|  
+|*|
+|*|  Developer: Matiboux (Mathieu Guérin)
+|*|
 |*|  --- --- ---
-|*|  
+|*|
 |*|  (ORIGINAL PROJECT) KeyGen: Created on July 30th, 2014
 |*|    Github repository: https://github.com/matiboux/KeyGen
-|*|  
+|*|
 |*|  Releases date:
 |*|    BETA: January 1st, 2017
 |*|    * Initial development phase
 |*|    * [version 0.1]:
 |*|              (0.1.0): January 12th, 2017
+|*|    * [version 0.2]:
+|*|              (0.2.0): ...
 \*/
 
-var version = "0.1.0",
+class KeygenLib {
 
-/*KeygenLib = function (numeric, lowercase, uppercase, special, length, redundancy) {
-    KeygenLib.setParameters(numeric, lowercase, uppercase, special, length, redundancy);
-    return KeygenLib.generateKeygen();
-}*/
+    // *** Public fields & properties
 
-KeygenLib = {
+    // KeyGen Active Parameters
+    parameters;
+
+    // *** Private fields & properties
 
     // The current KeyGen Lib version
-    version: version,
+    #_version = "0.2.0";
+    get version() {
+        return this.#_version;
+    }
 
     // Allowed Characters Sets
-    allowedCharacters: {
-        numeric: '1234567890',
-        lowercase: 'abcdefghijklmnopqrstuvwxyz',
-        uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        special: '!#$%&\()+-;?@[]^_{|}'
-    },
+    #_characterSets = {
+        numeric: "1234567890",
+        lowercase: "abcdefghijklmnopqrstuvwxyz",
+        uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        special: "!#$%&\\()+-;?@[]^_{|}"
+    };
+    get characterSets() {
+        return this.#_characterSets;
+    }
 
-    // Keygen generation parameters
-    parameters: {
+    // Archived state for default parameters
+    #_defaultParameters = {
         numeric: true,
         lowercase: true,
         uppercase: true,
         special: false,
         length: 12,
-        redundancy: false
-    },
-    lastParameters: [],
+        redundancy: true
+    };
+    get defaultParameters() {
+        return this.#_defaultParameters;
+    }
+
+    // Archived state for last used parameters
+    #_lastParameters = {...this.#_defaultParameters};
+    get lastParameters() {
+        return this.#_lastParameters;
+    }
+
+    // Error information
+    #_errorInfo = {
+        code: 0,
+        message: "No error"
+    };
+    get errorInfo() {
+        return this.#_errorInfo;
+    }
+
+    // *** Constructor
+
+    constructor(numeric, lowercase, uppercase, special, length, redundancy) {
+        this.setParameters(numeric, lowercase, uppercase, special, length, redundancy);
+    }
+
+    // *** Methods
 
     // Set Keygen generation parameters
-    setParameters: function (numeric, lowercase, uppercase, special, length, redundancy) {
+    setParameters(numeric, lowercase, uppercase, special, length, redundancy) {
         if (typeof numeric === 'object') {
-            var parameters = numeric;
+            const parameters = numeric;
+
             numeric = parameters.numeric;
             lowercase = parameters.lowercase;
             uppercase = parameters.uppercase;
@@ -74,72 +103,75 @@ KeygenLib = {
             redundancy = parameters.redundancy;
         }
 
-        KeygenLib.parameters.numeric = numeric ? true : false;
-        KeygenLib.parameters.lowercase = lowercase ? true : false;
-        KeygenLib.parameters.uppercase = uppercase ? true : false;
-        KeygenLib.parameters.special = special ? true : false;
-        KeygenLib.parameters.length = length;
-        KeygenLib.parameters.redundancy = redundancy ? true : false;
-    },
+        this.parameters.numeric = typeof numeric !== "undefined" ? !!numeric : this.#_lastParameters.numeric;
+        this.parameters.lowercase = typeof lowercase !== "undefined" ? !!lowercase : this.#_lastParameters.lowercase;
+        this.parameters.uppercase = typeof uppercase !== "undefined" ? !!uppercase : this.#_lastParameters.uppercase;
+        this.parameters.special = typeof special !== "undefined" ? !!special : this.#_lastParameters.special;
+        this.parameters.length = typeof length !== "undefined" ? length : this.#_lastParameters.length;
+        this.parameters.redundancy = typeof redundancy !== "undefined" ? !!redundancy : this.#_lastParameters.redundancy;
+    }
+
+    // Reset parameters
+    resetParameters() {
+        this.parameters = {...this.#_defaultParameters};
+    }
 
     // Generate a Keygen
-    generateKeygen: function () {
-        var charactersAllowed = '';
-        if (KeygenLib.parameters.numeric) charactersAllowed += KeygenLib.allowedCharacters.numeric;
-        if (KeygenLib.parameters.lowercase) charactersAllowed += KeygenLib.allowedCharacters.lowercase;
-        if (KeygenLib.parameters.uppercase) charactersAllowed += KeygenLib.allowedCharacters.uppercase;
-        if (KeygenLib.parameters.special) charactersAllowed += KeygenLib.allowedCharacters.special;
-        if (KeygenLib.parameters.redundancy) redundancy = KeygenLib.parameters.redundancy;
+    generateKeygen() {
+        let charactersAllowed = "";
+        if (this.parameters.numeric) charactersAllowed += this.#_characterSets.numeric;
+        if (this.parameters.lowercase) charactersAllowed += this.#_characterSets.lowercase;
+        if (this.parameters.uppercase) charactersAllowed += this.#_characterSets.uppercase;
+        if (this.parameters.special) charactersAllowed += this.#_characterSets.special;
 
-        if (charactersAllowed == '') {
-            KeygenLib.errorInfo = {
-                code: '01',
+        if (charactersAllowed === "") {
+            this.#_errorInfo = {
+                code: 1,
                 message: 'charactersAllowed string empty'
             };
             return false;
         }
-        else if (KeygenLib.parameters.length == '' || KeygenLib.parameters.length <= 0) {
-            KeygenLib.errorInfo = {
-                code: '02',
+        if (this.parameters.length === "" || this.parameters.length <= 0) {
+            this.#_errorInfo = {
+                code: 2,
                 message: 'length empty or negative'
             };
             return false;
         }
-        else {
 
-            if (!KeygenLib.parameters.redundancy && KeygenLib.parameters.length > charactersAllowed.length) KeygenLib.parameters.redundancy = true;
+        if (!this.parameters.redundancy && this.parameters.length > charactersAllowed.length)
+            this.parameters.redundancy = true;
 
-            var keygen = '';
-            while (keygen.length < KeygenLib.parameters.length) {
-                //var randomCharacter = substr(charactersAllowed, mt_rand(0, charactersAllowed.length - 1), 1);
-                var randomCharacter = charactersAllowed[KeygenLib.randomNumber(0, charactersAllowed.length - 1)];
-                if (KeygenLib.parameters.redundancy || keygen.indexOf(randomCharacter) < 0) keygen += randomCharacter;
-            }
+        let keygen = "";
+        while (keygen.length < this.parameters.length) {
+            const randomCharacter = charactersAllowed[this.randomNumber(0, charactersAllowed.length - 1)];
 
-            if (keygen == '') {
-                KeygenLib.errorInfo = {
-                    code: '03',
-                    message: 'generated keygen empty'
-                };
-            }
-            else {
-                KeygenLib.errorInfo = {
-                    code: '00',
-                    message: 'status ok'
-                };
-                KeygenLib.lastParameters.push(KeygenLib.parameters);
-                return keygen;
-            }
-
+            if (this.parameters.redundancy || keygen.indexOf(randomCharacter) < 0)
+                keygen += randomCharacter;
         }
 
-    },
+        if (keygen === "") {
+            this.#_errorInfo = {
+                code: 3,
+                message: 'Generated keygen empty'
+            };
+        } else {
+            this.#_errorInfo = {
+                code: 0,
+                message: 'No error'
+            };
+        }
+
+        this.#_lastParameters = {...this.parameters};
+        return keygen;
+    }
 
     // Generate a random int number
-    randomNumber: function (min, max) {
+    randomNumber(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+}
 
-};
+module.exports = KeygenLib;
