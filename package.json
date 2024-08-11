@@ -4,7 +4,7 @@
   "description": "KeyGenLib.js is an open source password generator JavaScript library.",
   "main": "KeyGenLib.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
