@@ -1,4 +1,4 @@
-const KeyGenLib = require('./KeyGenLib');
+const KeyGenLib = require('../KeyGenLib');
 
 const KeyGen = new KeyGenLib();
 let parameters;
