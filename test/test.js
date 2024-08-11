@@ -1,82 +1,76 @@
 const KeyGenLib = require('../KeyGenLib');
 
-const KeyGen = new KeyGenLib();
-let parameters;
+test('generates with default parameters', () => {
+	const KeyGen = new KeyGenLib();
+	expect(KeyGen.generateKeygen()).toBeTruthy();
+});
 
-console.log("Testing generating keygens!");
-console.log();
+test('generates like a PIN code', () => {
+	const KeyGen = new KeyGenLib();
+	const parameters = {
+		numeric: true,
+		lowercase: false,
+		uppercase: false,
+		special: false,
+		length: 4,
+		redundancy: true
+	};
+	KeyGen.setParameters(parameters);
+	expect(KeyGen.generateKeygen()).toBeTruthy();
+});
 
-console.log("Using the default parameters:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
+test('generates like a CD-key component', () => {
+	const KeyGen = new KeyGenLib();
+	const parameters = {
+		numeric: true,
+		lowercase: false,
+		uppercase: true,
+		special: false,
+		length: 16,
+		redundancy: true
+	};
+	KeyGen.setParameters(parameters);
+	expect(KeyGen.generateKeygen()).toBeTruthy();
+});
 
-parameters = {
-    numeric: true,
-    lowercase: false,
-    uppercase: false,
-    special: false,
-    length: 4,
-    redundancy: true
-};
-KeyGen.setParameters(parameters);
-console.log(parameters);
-console.log("Parameters for a PIN code:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
+test('resets to default parameters', () => {
+	const KeyGen = new KeyGenLib();
+	KeyGen.resetParameters();
+	expect(KeyGen.generateKeygen()).toBeTruthy();
+});
 
-parameters = {
-    uppercase: true,
-    length: 16
-};
-KeyGen.setParameters(parameters);
-console.log(parameters);
-console.log("Parameters for a CD-key component:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
+test('generates a long password with special characters', () => {
+	const KeyGen = new KeyGenLib();
+	const parameters = {
+		special: true,
+		length: 64
+	};
+	KeyGen.setParameters(parameters);
+	expect(KeyGen.generateKeygen()).toBeTruthy();
+});
 
-KeyGen.resetParameters();
-console.log("Restoring the default parameters:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
+test('misconfigures parameters with no characters set', () => {
+	const KeyGen = new KeyGenLib();
+	const parameters = {
+		numeric: false,
+		lowercase: false,
+		uppercase: false,
+		special: false
+	};
+	KeyGen.setParameters(parameters);
+	expect(KeyGen.generateKeygen()).toBe(false);
+	expect(KeyGen.errorInfo).toBeDefined();
+});
 
-parameters = {
-    special: true,
-    length: 64
-};
-KeyGen.setParameters(parameters);
-console.log(parameters);
-console.log("Long password with special characters:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
-
-parameters = {
-    numeric: false,
-    lowercase: false,
-    uppercase: false,
-    special: false
-};
-KeyGen.setParameters(parameters);
-console.log(parameters);
-console.log("Generating error 1:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
-
-console.log("Error Info:");
-console.log(KeyGen.errorInfo);
-console.log();
-
-parameters = {
-    numeric: true,
-    lowercase: true,
-    uppercase: true,
-    length: 0
-};
-KeyGen.setParameters(parameters);
-console.log(parameters);
-console.log("Generating error 2:");
-console.log("> " + KeyGen.generateKeygen());
-console.log();
-
-console.log("Error Info:");
-console.log(KeyGen.errorInfo);
-console.log();
+test('misconfigures parameters with no length', () => {
+	const KeyGen = new KeyGenLib();
+	const parameters = {
+		numeric: true,
+		lowercase: true,
+		uppercase: true,
+		length: 0
+	};
+	KeyGen.setParameters(parameters);
+	expect(KeyGen.generateKeygen()).toBe(false);
+	expect(KeyGen.errorInfo).toBeDefined();
+});
