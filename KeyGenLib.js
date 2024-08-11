@@ -99,6 +99,7 @@ class KeygenLib {
             redundancy = parameters.redundancy;
         }
 
+        this.parameters = {};
         this.parameters.numeric = typeof numeric !== "undefined" ? !!numeric : this.#_lastParameters.numeric;
         this.parameters.lowercase = typeof lowercase !== "undefined" ? !!lowercase : this.#_lastParameters.lowercase;
         this.parameters.uppercase = typeof uppercase !== "undefined" ? !!uppercase : this.#_lastParameters.uppercase;
