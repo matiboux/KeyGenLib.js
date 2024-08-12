@@ -27,3 +27,21 @@ test('gets the default parameters', () =>
 		expect(KeyGen.defaultParameters.length).toBeGreaterThan(0)
 		expect(KeyGen.defaultParameters.redundancy).toBeDefined()
 	})
+
+test('gets the last parameters', () =>
+	{
+		const KeyGen = new KeyGenLib()
+		expect(KeyGen.lastParameters).toBeDefined()
+		expect(KeyGen.lastParameters.numeric).toBeDefined()
+		expect(KeyGen.lastParameters.lowercase).toBeDefined()
+		expect(KeyGen.lastParameters.uppercase).toBeDefined()
+		expect(KeyGen.lastParameters.special).toBeDefined()
+		expect(KeyGen.lastParameters.length).toBeGreaterThan(0)
+		expect(KeyGen.lastParameters.redundancy).toBeDefined()
+	})
+
+test('asserts last parameters are default parameters', () =>
+	{
+		const KeyGen = new KeyGenLib()
+		expect(KeyGen.lastParameters).toEqual(KeyGen.defaultParameters)
+	})
