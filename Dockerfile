@@ -38,7 +38,7 @@ WORKDIR /app
 # --
 # Dev image
 
-FROM node_upstream AS app_dev
+FROM app_base AS app_dev
 
 ENV APP_ENV=dev
 ENV NODE_ENV=development
@@ -62,4 +62,11 @@ FROM app_dev AS app_test
 
 ENV APP_ENV=test
 
-CMD [ "npm", "test" ]
+# Install jq
+RUN --mount=type=cache,target=/var/cache/apt \
+	--mount=type=cache,target=/var/lib/apt \
+	apt-get update && apt-get install -y jq
+
+COPY --link --chmod=755 ./docker-test-command.sh /usr/local/bin/docker-test-command
+
+CMD [ "docker-test-command" ]
