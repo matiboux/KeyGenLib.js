@@ -9,5 +9,6 @@ services:
     # Deploy override
     environment:
       COVERAGE_THRESHOLD: ${COVERAGE_THRESHOLD:-}
+      COVERAGE_LCOV: ${COVERAGE_LCOV:-}
     volumes:
       - .:/app
