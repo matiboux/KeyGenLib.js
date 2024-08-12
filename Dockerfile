@@ -38,7 +38,7 @@ WORKDIR /app
 # --
 # Dev image
 
-FROM node_upstream AS app_dev
+FROM app_base AS app_dev
 
 ENV APP_ENV=dev
 ENV NODE_ENV=development
