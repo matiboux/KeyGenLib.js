@@ -2,12 +2,29 @@
 
 set -e
 
+case "$COVERAGE_LCOV" in
+	[Tt][Rr][Uu][Ee] | [Yy][Ee][Ss] | [Oo][Nn] | 1)
+		COVERAGE_LCOV=true
+		;;
+	*)
+		COVERAGE_LCOV=false
+		;;
+esac
+
 # Run Jest tests with coverage
-NPM_CONFIG_UPDATE_NOTIFIER=false \
-npx jest --coverage \
-	--coverageReporters="text" \
-	--coverageReporters="text-summary" \
-	--coverageReporters="json-summary"
+export NPM_CONFIG_UPDATE_NOTIFIER=false
+if [ "$COVERAGE_LCOV" = "true" ]; then
+	npx jest --coverage \
+		--coverageReporters="text" \
+		--coverageReporters="text-summary" \
+		--coverageReporters="lcov" \
+		--coverageReporters="json-summary"
+else
+	npx jest --coverage \
+		--coverageReporters="text" \
+		--coverageReporters="text-summary" \
+		--coverageReporters="json-summary"
+fi
 
 # Get Jest coverage score
 COVERAGE_STATEMENTS=$(jq '.total.statements.pct' < ./coverage/coverage-summary.json)
