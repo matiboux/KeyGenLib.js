@@ -15,3 +15,15 @@ test('gets the character sets', () =>
 		expect(KeyGen.characterSets.uppercase).toMatch(/^[A-Z]+$/)
 		expect(KeyGen.characterSets.special).toMatch(/^[^a-zA-Z0-9]+$/)
 	})
+
+test('gets the default parameters', () =>
+	{
+		const KeyGen = new KeyGenLib()
+		expect(KeyGen.defaultParameters).toBeDefined()
+		expect(KeyGen.defaultParameters.numeric).toBeDefined()
+		expect(KeyGen.defaultParameters.lowercase).toBeDefined()
+		expect(KeyGen.defaultParameters.uppercase).toBeDefined()
+		expect(KeyGen.defaultParameters.special).toBeDefined()
+		expect(KeyGen.defaultParameters.length).toBeGreaterThan(0)
+		expect(KeyGen.defaultParameters.redundancy).toBeDefined()
+	})
