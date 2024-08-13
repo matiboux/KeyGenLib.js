@@ -1,0 +1,38 @@
+name: Deploy CD
+
+on:
+  # Run on push events on primary branches
+  push:
+    branches:
+      - main
+
+  # Run on manual triggers
+  workflow_dispatch:
+
+# Set GITHUB_TOKEN permissions
+permissions:
+  contents: read
+
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+
+  # Deploy job
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Build docker images for deployment
+      run: docker compose -f ./docker-compose.yml -f ./docker-compose.cicd.yml build
+
+    - name: Run docker containers for deployment
+      run: docker compose -f ./docker-compose.yml -f ./docker-compose.cicd.yml up
