@@ -41,9 +41,9 @@ dist/
 
 # -- Specific to dockerignore:
 
-# Docker configuration files
-Dockerfile
-docker-compose*.yml
+# Docker files
+*Dockerfile
+docker*
 
 # Dotfiles
 .*
