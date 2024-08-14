@@ -36,9 +36,9 @@ WORKDIR /app
 
 
 # --
-# Dev image
+# Dev base image
 
-FROM app_base AS app_dev
+FROM app_base AS app_dev_base
 
 ENV APP_ENV=dev
 ENV NODE_ENV=development
@@ -49,6 +49,12 @@ RUN --mount=type=bind,source=./package.json,target=./package.json \
 	--mount=type=cache,target=/root/.npm \
 	npm clean-install --include=dev
 
+
+# --
+# Dev image
+
+FROM app_dev_base AS app_dev
+
 # Copy source code
 COPY --link . .
 
@@ -58,7 +64,7 @@ CMD [ "npm", "start" ]
 # --
 # Test image
 
-FROM app_dev AS app_test
+FROM app_dev_base AS app_test
 
 ENV APP_ENV=test
 
@@ -66,6 +72,9 @@ ENV APP_ENV=test
 RUN --mount=type=cache,target=/var/cache/apt \
 	--mount=type=cache,target=/var/lib/apt \
 	apt-get update && apt-get install -y jq
+
+# Source code should be mounted here
+VOLUME /app
 
 COPY --link --chmod=755 ./docker-test-command.sh /usr/local/bin/docker-test-command
 
