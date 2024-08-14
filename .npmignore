@@ -1,0 +1,55 @@
+# -- Generic rules:
+
+# Environment files
+.env*.local
+
+# Temporary files
+._*
+*~
+*.cache
+*.log*
+*.swp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# -- Editor rules:
+
+# VS Code
+.vscode/**/*
+!.vscode/extensions.json
+
+# Jetbrains
+.idea/
+
+# Other
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# -- Application rules:
+
+# Node.js
+node_modules/
+
+# Application
+coverage/
+dist/
+
+# -- Specific to npmignore:
+
+# GitHub files
+/.github/
+
+# Docker files
+*Dockerfile
+docker*
+
+# Dotfiles
+.*
+
+# Application tests
+/test/
