@@ -38,9 +38,3 @@ node_modules/
 # Application
 coverage/
 dist/
-
-# -- Specific to gitignore:
-
-# Build configuration files (allow)
-!Dockerfile
-!Makefile
