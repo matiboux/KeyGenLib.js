@@ -16,9 +16,6 @@
 	"bugs": {
 		"url": "https://github.com/matiboux/KeyGenLib.js/issues"
 	},
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com/"
-	},
   "devDependencies": {
     "jest": "^29.7.0"
   }
