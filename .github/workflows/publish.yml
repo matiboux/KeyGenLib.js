@@ -35,4 +35,7 @@ jobs:
       run: docker compose -f ./docker-compose.yml -f ./docker-compose.publish.yml build
 
     - name: Run docker containers for deployment
+      env:
+        # JSON configuration for publishing
+        PUBLISH_CONFIG: ${{ secrets.PUBLISH_CONFIG }}
       run: docker compose -f ./docker-compose.yml -f ./docker-compose.publish.yml up
