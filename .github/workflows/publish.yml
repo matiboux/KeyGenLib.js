@@ -1,10 +1,10 @@
 name: Publish CD
 
 on:
-  # Run on push events on primary branches
-  push:
-    branches:
-      - main
+  # # Run on push events on primary branches
+  # push:
+  #   branches:
+  #     - main
 
   # Run on manual triggers
   workflow_dispatch:
