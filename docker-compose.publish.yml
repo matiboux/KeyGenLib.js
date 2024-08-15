@@ -1,0 +1,15 @@
+# Services definition override for publishing
+services:
+
+  app:
+    # Build override
+    image: ${IMAGES_PREFIX:-app}-publish:${DOCKER_TAG:-latest}
+    build:
+      target: app_publish
+    # Deploy override
+    environment:
+      NPM_REGISTRY: ${NPM_REGISTRY:-}
+      NPM_TOKEN: ${NPM_TOKEN:-}
+      PUBLISH_CONFIG: ${PUBLISH_CONFIG:-}
+    volumes:
+      - .:/app

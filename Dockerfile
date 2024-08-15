@@ -62,16 +62,22 @@ CMD [ "npm", "start" ]
 
 
 # --
-# Test image
+# CLI base image
 
-FROM app_dev_base AS app_test
-
-ENV APP_ENV=test
+FROM app_dev_base AS app_cli_base
 
 # Install jq
 RUN --mount=type=cache,target=/var/cache/apt \
 	--mount=type=cache,target=/var/lib/apt \
 	apt-get update && apt-get install -y jq
+
+
+# --
+# Test image
+
+FROM app_cli_base AS app_test
+
+ENV APP_ENV=test
 
 # Source code should be mounted here
 VOLUME /app
@@ -79,3 +85,19 @@ VOLUME /app
 COPY --link --chmod=755 ./docker-test-command.sh /usr/local/bin/docker-test-command
 
 CMD [ "docker-test-command" ]
+
+
+# --
+# Publish image
+
+FROM app_cli_base AS app_publish
+
+ENV APP_ENV=prod
+ENV NODE_ENV=production
+
+# Source code should be mounted here
+VOLUME /app
+
+COPY --link --chmod=755 ./docker-publish-command.sh /usr/local/bin/docker-publish-command
+
+CMD [ "docker-publish-command" ]
