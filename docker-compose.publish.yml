@@ -8,8 +8,6 @@ services:
       target: app_publish
     # Deploy override
     environment:
-      NPM_REGISTRY: ${NPM_REGISTRY:-}
-      NPM_TOKEN: ${NPM_TOKEN:-}
       PUBLISH_CONFIG: ${PUBLISH_CONFIG:-}
     volumes:
       - .:/app
