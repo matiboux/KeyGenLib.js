@@ -1,4 +1,4 @@
-name: Deploy CD
+name: Publish CD
 
 on:
   # Run on push events on primary branches
@@ -32,7 +32,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build docker images for deployment
-      run: docker compose -f ./docker-compose.yml -f ./docker-compose.cicd.yml build
+      run: docker compose -f ./docker-compose.yml -f ./docker-compose.publish.yml build
 
     - name: Run docker containers for deployment
-      run: docker compose -f ./docker-compose.yml -f ./docker-compose.cicd.yml up
+      run: docker compose -f ./docker-compose.yml -f ./docker-compose.publish.yml up
