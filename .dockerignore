@@ -43,7 +43,7 @@ dist/
 
 # Docker files
 *Dockerfile
-docker*
+*compose*.yml
 
 # Dotfiles
 .*
