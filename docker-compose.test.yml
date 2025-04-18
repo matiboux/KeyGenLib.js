@@ -1,14 +1,26 @@
 # Services overrides for testing
+
+x-common:
+
+  app-test-environment: &app-test-environment
+    COVERAGE_THRESHOLD: ${TEST_COVERAGE_THRESHOLD:-}
+
 services:
 
   app:
+    # Extend
+    extends:
+      file: ./docker-compose.yml
+      service: app
     # Build override
     image: ${IMAGES_PREFIX:-app}-test:${IMAGES_TAG:-latest}
     build:
       target: app_test
+      args:
+        UID: ${DOCKER_UID:-${UID:-1000}}
     # Deploy override
+    user: ${DOCKER_UID:-${UID:-1000}}
     environment:
-      COVERAGE_THRESHOLD: ${COVERAGE_THRESHOLD:-}
-      COVERAGE_LCOV: ${COVERAGE_LCOV:-}
-    volumes:
-      - ./app/app:/app
+      <<: [ *app-test-environment ]
+    tmpfs:
+      - /tmp:mode=775,uid=${DOCKER_UID:-${UID:-1000}},gid=0
