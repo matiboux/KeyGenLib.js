@@ -1,3 +1,4 @@
+// @ts-ignore
 import KeyGenLib from '/KeyGenLib'
 
 test('misconfigures parameters with no characters set', () =>

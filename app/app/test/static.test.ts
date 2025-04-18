@@ -1,3 +1,4 @@
+// @ts-ignore
 import KeyGenLib from '/KeyGenLib'
 
 test('gets the version', () =>

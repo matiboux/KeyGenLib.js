@@ -1,3 +1,4 @@
+// @ts-ignore
 import KeyGenLib from '/KeyGenLib'
 
 test('generates with default parameters', () =>
