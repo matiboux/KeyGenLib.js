@@ -3,7 +3,7 @@ services:
 
   app:
     # Build override
-    image: ${IMAGES_PREFIX:-app}-test:${DOCKER_TAG:-latest}
+    image: ${IMAGES_PREFIX:-app}-test:${IMAGES_TAG:-latest}
     build:
       target: app_test
     # Deploy override
@@ -11,4 +11,4 @@ services:
       COVERAGE_THRESHOLD: ${COVERAGE_THRESHOLD:-}
       COVERAGE_LCOV: ${COVERAGE_LCOV:-}
     volumes:
-      - .:/app
+      - ./app/app:/app

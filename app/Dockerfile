@@ -54,3 +54,39 @@ VOLUME /app
 COPY --link --chmod=755 ./docker/cli-entrypoint.sh /usr/local/bin/app-cli-entrypoint
 ENTRYPOINT [ "app-cli-entrypoint" ]
 CMD [ "--help" ]
+
+
+# --
+# Dev image
+
+FROM app_base AS app_dev
+
+ENV APP_ENV=dev
+ENV NODE_ENV=development
+
+# Install dev dependencies
+RUN --mount=type=bind,source=./package.json,target=./package.json \
+	--mount=type=bind,source=./package-lock.json,target=./package-lock.json \
+	--mount=type=cache,target=/root/.npm \
+	npm clean-install --include=dev
+
+# Copy source code
+COPY --link ./app .
+
+CMD [ "npm", "start" ]
+
+
+# --
+# Test image
+
+FROM app_dev AS app_test
+
+ENV APP_ENV=test
+
+# Install jq
+RUN --mount=type=cache,target=/var/cache/apt \
+	--mount=type=cache,target=/var/lib/apt \
+	apt-get update && apt-get install -y jq
+
+COPY --link --chmod=755 ./docker/test-command.sh /usr/local/bin/app-test-command
+CMD [ "app-test-command" ]
