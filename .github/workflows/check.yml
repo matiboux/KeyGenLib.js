@@ -2,61 +2,146 @@ name: Check CI
 
 on:
 
-  # Run on pull requests events on primary branches
+  # Run on pull requests to primary branches
   pull_request:
     branches:
-      - main
-      - dev
+      - main # Production
+      - dev # Development
+    paths:
+      # CI files
+      - '.github/workflows/check.yml'
+      - 'docker-compose.yml'
+      - 'docker-compose.test.yml'
+      - '.env'
+      # Application files
+      - 'app/**'
 
   # Run on manual triggers
   workflow_dispatch:
 
-# Set GITHUB_TOKEN permissions
+# Set GITHUB_TOKEN permissions for the workflow
 permissions:
   contents: read
 
-# Allow one concurrent deployment
+# Set workflow concurrency rules
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
 
-  # Test job
-  test:
-    name: Test
+  # Build job
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    env:
-      # List of services required to succeed
-      CHECK_SERVICES: app
+    timeout-minutes: 20
 
     steps:
+
+      # Steps dependencies
 
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build docker images for testing
-        run: docker compose -f ./docker-compose.yml -f ./docker-compose.test.yml build
+      # Execution steps
 
-      - name: Run docker containers for testing
-        env:
-          CHECK_SERVICES: ${{ env.CHECK_SERVICES }}
+      - name: Pull dependencies
         run: |
+          # docker compose pull --ignore-buildable
+          docker compose \
+            -f ./docker-compose.yml \
+            --env-file .env \
+            pull --ignore-buildable
+
+      - name: Build for production
+        run: |
+          # docker compose build
+          echo "::group::Build details"
+          export DOCKER_UID="$(id -u)"
+          docker compose \
+            -f ./docker-compose.yml \
+            --env-file .env \
+            build
+          echo "::endgroup::"
+
+  # Test job
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+
+      # Steps dependencies
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Execution steps
+
+      - name: Pull dependencies
+        run: |
+          # docker compose pull --ignore-buildable
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.test.yml \
-            --env-file .env --env-file .env.test \
-            up
+            --env-file .env \
+            pull --ignore-buildable
 
-          # Check services for non-zero exit codes
-          NON_ZERO_EXIT_CODES=$(
-            docker compose -f ./docker-compose.yml -f ./docker-compose.test.yml \
-              ps -a --format '{{json .ExitCode}}' \
-              ${CHECK_SERVICES} \
-            | tr -d '[:space:]0'
-          )
-          if [ -n "${NON_ZERO_EXIT_CODES}" ]; then
-            # Non-zero exit code found
-            exit 1
-          fi
+      - name: Build for tests
+        run: |
+          # docker compose build
+          echo "::group::Build details"
+          export DOCKER_UID="$(id -u)"
+          docker compose \
+            -f ./docker-compose.yml -f ./docker-compose.test.yml \
+            --env-file .env \
+            build
+          echo "::endgroup::"
+
+      - name: Start tests
+        run: |
+          # docker compose up
+          export DOCKER_UID="$(id -u)"
+          docker compose \
+            -f ./docker-compose.yml -f ./docker-compose.test.yml \
+            --env-file .env \
+            up -d
+
+      - name: List tests services
+        run: |
+          # Set DOCKER_SERVICES environment variable
+          DOCKER_SERVICES="$(
+            docker compose \
+              -f ./docker-compose.yml -f ./docker-compose.test.yml \
+              --env-file .env \
+              config --services
+          )"
+          echo "Set DOCKER_SERVICES to '${DOCKER_SERVICES}'"
+          echo "DOCKER_SERVICES<<GITHUB_ENV_EOF" >> $GITHUB_ENV
+          echo "${DOCKER_SERVICES}" >> $GITHUB_ENV
+          echo 'GITHUB_ENV_EOF' >> $GITHUB_ENV
+
+      - name: Wait for tests to finish
+        env:
+          DOCKER_SERVICES: ${{ env.DOCKER_SERVICES }}
+        run: |
+          # docker compose wait
+          docker compose \
+            -f ./docker-compose.yml -f ./docker-compose.test.yml \
+            --env-file .env \
+            wait $DOCKER_SERVICES \
+            || exit 0
+
+      - name: Print tests logs
+        env:
+          DOCKER_SERVICES: ${{ env.DOCKER_SERVICES }}
+        run: |
+          # docker compose logs
+          for SERVICE in $DOCKER_SERVICES; do
+            echo "::group::Docker logs for service '${SERVICE}'"
+            docker compose \
+              -f ./docker-compose.yml -f ./docker-compose.test.yml \
+              --env-file .env \
+              logs --no-log-prefix $SERVICE
+            echo "::endgroup::"
+          done

@@ -1,14 +1,15 @@
-const KeyGenLib = require('../KeyGenLib')
+// @ts-ignore
+import KeyGenLib from '/KeyGenLib'
 
-test('generates like a CD-key component', () =>
+test('generates like a PIN code', () =>
 	{
 		const KeyGen = new KeyGenLib()
 		const parameters = {
 			numeric: true,
 			lowercase: false,
-			uppercase: true,
+			uppercase: false,
 			special: false,
-			length: 16,
+			length: 4,
 			redundancy: true,
 		}
 		KeyGen.setParameters(parameters)

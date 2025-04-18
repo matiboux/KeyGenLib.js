@@ -5,10 +5,10 @@
 
 # Temporary files
 ._*
-*~
 *.cache
 *.log*
 *.swp
+*~
 
 # System files
 .DS_Store
@@ -34,9 +34,10 @@ Thumbs.db
 
 # Node.js
 node_modules/
-
-# Application
 dist/
+
+# Application environment files
+*/**/.env*
 
 # -- Specific to dockerignore:
 

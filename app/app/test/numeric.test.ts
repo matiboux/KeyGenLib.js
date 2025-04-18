@@ -1,4 +1,5 @@
-const KeyGenLib = require('../KeyGenLib')
+// @ts-ignore
+import KeyGenLib from '/KeyGenLib'
 
 test('generates a numeric keygen', () =>
 	{
