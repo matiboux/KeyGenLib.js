@@ -209,7 +209,7 @@ COPY --link --chown="${UID}:0" ./app .
 # Create user 'user' in group 'root'
 RUN USERNAME="$(getent passwd "${UID}" | cut -d: -f1)"; \
 	if [ -z "${USERNAME}" ]; then \
-		useradd -lm -u "${UID}" -g "${UID}" -G 0 user; \
+		useradd -lm -u "${UID}" -U -G 0 user; \
 	else \
 		usermod -a -G 0 "${USERNAME}"; \
 	fi
