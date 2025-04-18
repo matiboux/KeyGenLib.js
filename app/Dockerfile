@@ -38,10 +38,24 @@ RUN --mount=type=cache,target=~/.npm \
 
 
 # --
+# Build dev image
+
+FROM app_build_base AS app_build_dev
+
+# Copy app build configuration
+COPY --link ./app/package.json ./app/pnpm-lock.yaml ./
+
+# Install app development dependencies
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+	pnpm install --frozen-lockfile
+
+
+# --
 # CLI image
 
 FROM app_build_base AS app_cli
 
+# Build arguments
 ARG UID
 
 # Run as non-root user
@@ -54,26 +68,6 @@ VOLUME /app
 COPY --link --chmod=755 ./docker/cli-entrypoint.sh /usr/local/bin/app-cli-entrypoint
 ENTRYPOINT [ "app-cli-entrypoint" ]
 CMD [ "--help" ]
-
-
-# --
-# Dev image
-
-FROM app_base AS app_dev
-
-ENV APP_ENV=dev
-ENV NODE_ENV=development
-
-# Install dev dependencies
-RUN --mount=type=bind,source=./package.json,target=./package.json \
-	--mount=type=bind,source=./package-lock.json,target=./package-lock.json \
-	--mount=type=cache,target=/root/.npm \
-	npm clean-install --include=dev
-
-# Copy source code
-COPY --link ./app .
-
-CMD [ "npm", "start" ]
 
 
 # --
@@ -90,3 +84,40 @@ RUN --mount=type=cache,target=/var/cache/apt \
 
 COPY --link --chmod=755 ./docker/test-command.sh /usr/local/bin/app-test-command
 CMD [ "app-test-command" ]
+
+
+# --
+# Dev image
+
+FROM app_base AS app_dev
+
+# Build arguments
+ARG UID
+
+# Set runtime environment
+ENV APP_ENV=dev
+ENV NODE_ENV=development
+
+# Copy app development dependencies
+COPY --link --from=app_build_dev --chown="${UID}:0" /app/node_modules ./node_modules
+
+# Copy source code
+COPY --link --chown="${UID}:0" ./app .
+
+# Create user 'user' in group 'root'
+RUN USERNAME="$(getent passwd "${UID}" | cut -d: -f1)"; \
+	if [ -z "${USERNAME}" ]; then \
+		useradd -lm -u "${UID}" -g "${UID}" -G 0 user; \
+	else \
+		usermod -a -G 0 "${USERNAME}"; \
+	fi
+
+# Run as non-root user
+USER ${UID}:0
+
+# Set exposed port
+ARG PORT=8080
+ENV PORT=${PORT}
+EXPOSE ${PORT}
+
+CMD [ "npm", "start" ]
