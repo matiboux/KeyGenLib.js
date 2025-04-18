@@ -1,24 +1,28 @@
 {
   "name": "@matiboux/keygenlib.js",
-  "version": "1.0.1",
   "description": "KeyGenLib.js is an open source password generator JavaScript library.",
+  "author": "Matiboux",
+  "license": "MIT",
+  "version": "1.0.1",
   "main": "KeyGenLib.js",
   "scripts": {
-    "test": "jest"
+    "start": "node .",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:coverage+watch": "jest --coverage --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matiboux/KeyGenLib.js.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "author": "Matiboux <matiboux@gmail.com> (https://matiboux.me/)",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/matiboux/KeyGenLib.js/issues"
   },
   "homepage": "https://github.com/matiboux/KeyGenLib.js#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "devDependencies": {
     "jest": "^29.7.0"
   }
