@@ -2,7 +2,7 @@
 export default {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
-	roots: ['<rootDir>/test'],
+	roots: ['<rootDir>', '<rootDir>/test'],
 	transform: {
 	  '^.+\\.tsx?$': ['ts-jest', {}],
 	},
@@ -18,5 +18,7 @@ export default {
 			statements: Number(process.env.COVERAGE_THRESHOLD || 50),
 		},
 	},
-	moduleNameMapper: {},
+	moduleNameMapper: {
+		'^/(.*)$': '<rootDir>/$1',
+	},
 };

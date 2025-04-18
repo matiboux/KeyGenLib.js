@@ -1,4 +1,4 @@
-const KeyGenLib = require('../KeyGenLib')
+import KeyGenLib from '/KeyGenLib'
 
 test('generates a long password with special characters', () =>
 	{
