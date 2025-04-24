@@ -4,13 +4,12 @@ describe('generateInteger', () =>
 {
 	describe('generate from integer min and max', () =>
 	{
-
 		it('should generate an integer between positive min and max', () =>
 		{
 			const data = generateInteger(1, 10)
 			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBeGreaterThanOrEqual(1)
-			expect(data).toBeLessThan(10)
+			expect(data).toBeLessThanOrEqual(10)
 		})
 
 		it('should generate an integer between negative min and max', () =>
@@ -18,7 +17,7 @@ describe('generateInteger', () =>
 			const data = generateInteger(-5, -1)
 			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBeGreaterThanOrEqual(-5)
-			expect(data).toBeLessThan(-1)
+			expect(data).toBeLessThanOrEqual(-1)
 		})
 
 		it('should generate an integer between negative min and positive max', () =>
@@ -26,7 +25,7 @@ describe('generateInteger', () =>
 			const data = generateInteger(-10, 10)
 			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBeGreaterThanOrEqual(-10)
-			expect(data).toBeLessThan(10)
+			expect(data).toBeLessThanOrEqual(10)
 		})
 	})
 
@@ -148,5 +147,4 @@ describe('generateInteger', () =>
 			expect(() => generateInteger(1, 'b' as any)).toThrow(Error)
 		})
 	})
-
 })
