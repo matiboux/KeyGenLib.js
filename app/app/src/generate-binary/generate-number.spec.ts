@@ -49,6 +49,40 @@ describe('generateNumber', () =>
 			expect(data).toBeGreaterThanOrEqual(-10.5)
 			expect(data).toBeLessThan(10.5)
 		})
+
+		it('should generate a number smaller than Epsilon', () =>
+		{
+			const data = generateNumber(0, Number.EPSILON)
+			expect(data).toBeGreaterThanOrEqual(0)
+			expect(data).toBeLessThan(Number.EPSILON)
+		})
+	})
+
+	describe('generate precise numbers', () =>
+	{
+		it('should generate a zero explicitly', () =>
+		{
+			const data = generateNumber(0, 0)
+			expect(data).toBe(0)
+		})
+
+		it('should generate 42', () =>
+		{
+			const data = generateNumber(42, 42)
+			expect(data).toBe(42)
+		})
+
+		it('should generate -10', () =>
+		{
+			const data = generateNumber(-10, -10)
+			expect(data).toBe(-10)
+		})
+
+		it('should generate either zero or the smallest number', () =>
+		{
+			const data = generateNumber(0, Number.MIN_VALUE)
+			expect([0, Number.MIN_VALUE]).toContain(data)
+		})
 	})
 
 	describe('failure cases', () =>
