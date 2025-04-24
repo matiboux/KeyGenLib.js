@@ -1,14 +1,4 @@
-import { LOWERCASE_SET, NUMERIC_SET, SPECIAL_SET, UPPERCASE_SET } from './character-set-consts'
-
-export interface IDefaultParameters
-{
-	numeric: boolean
-	lowercase: boolean
-	uppercase: boolean
-	special: boolean
-	length: number
-	redundancy: boolean
-}
+import type { IDefaultParameters } from './default-parameters.interface.d.ts'
 
 export const DEFAULT_PARAMETERS: IDefaultParameters = {
 	numeric: true,
