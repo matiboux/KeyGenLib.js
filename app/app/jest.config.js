@@ -9,7 +9,7 @@ export default {
 	testRegex: '(/__test__/.*|(\\.|/)(test|spec))\\.tsx?$',
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 	coverageReporters: ['lcov', 'text'],
-	coverageDirectory: 'coverage',
+	coverageDirectory: '.coverage',
 	coverageThreshold: {
 		global: {
 			branches: Number(process.env.COVERAGE_THRESHOLD || 50),
