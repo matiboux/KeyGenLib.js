@@ -8,6 +8,7 @@ describe('generateInteger', () =>
 		it('should generate an integer between positive min and max', () =>
 		{
 			const data = generateInteger(1, 10)
+			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBeGreaterThanOrEqual(1)
 			expect(data).toBeLessThan(10)
 		})
@@ -15,6 +16,7 @@ describe('generateInteger', () =>
 		it('should generate an integer between negative min and max', () =>
 		{
 			const data = generateInteger(-5, -1)
+			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBeGreaterThanOrEqual(-5)
 			expect(data).toBeLessThan(-1)
 		})
@@ -22,6 +24,7 @@ describe('generateInteger', () =>
 		it('should generate an integer between negative min and positive max', () =>
 		{
 			const data = generateInteger(-10, 10)
+			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBeGreaterThanOrEqual(-10)
 			expect(data).toBeLessThan(10)
 		})
@@ -32,29 +35,32 @@ describe('generateInteger', () =>
 		it('should generate an integer between positive min and max', () =>
 		{
 			const data = generateInteger(1.5, 10.5)
-			expect(data).toBeGreaterThanOrEqual(1.5)
-			expect(data).toBeLessThan(10.5)
+			expect(Number.isInteger(data)).toBeTruthy()
+			expect(data).toBeGreaterThanOrEqual(2)
+			expect(data).toBeLessThanOrEqual(10)
 		})
 
 		it('should generate an integer between negative min and max', () =>
 		{
 			const data = generateInteger(-5.5, -1.5)
-			expect(data).toBeGreaterThanOrEqual(-5.5)
-			expect(data).toBeLessThan(-1.5)
+			expect(Number.isInteger(data)).toBeTruthy()
+			expect(data).toBeGreaterThanOrEqual(-5)
+			expect(data).toBeLessThanOrEqual(-2)
 		})
 
 		it('should generate an integer between negative min and positive max', () =>
 		{
 			const data = generateInteger(-10.5, 10.5)
-			expect(data).toBeGreaterThanOrEqual(-10.5)
-			expect(data).toBeLessThan(10.5)
+			expect(Number.isInteger(data)).toBeTruthy()
+			expect(data).toBeGreaterThanOrEqual(-10)
+			expect(data).toBeLessThanOrEqual(10)
 		})
 
 		it('should generate an integer smaller than Epsilon', () =>
 		{
 			const data = generateInteger(0, Number.EPSILON)
-			expect(data).toBeGreaterThanOrEqual(0)
-			expect(data).toBeLessThan(Number.EPSILON)
+			expect(Number.isInteger(data)).toBeTruthy()
+			expect(data).toBe(0)
 		})
 	})
 
@@ -63,25 +69,28 @@ describe('generateInteger', () =>
 		it('should generate a zero explicitly', () =>
 		{
 			const data = generateInteger(0, 0)
+			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBe(0)
 		})
 
 		it('should generate 42', () =>
 		{
 			const data = generateInteger(42, 42)
+			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBe(42)
 		})
 
 		it('should generate -10', () =>
 		{
 			const data = generateInteger(-10, -10)
+			expect(Number.isInteger(data)).toBeTruthy()
 			expect(data).toBe(-10)
 		})
 
-		it('should generate either zero or the smallest number', () =>
+		it('should generate zero, constrained by the smallest number', () =>
 		{
 			const data = generateInteger(0, Number.MIN_VALUE)
-			expect([0, Number.MIN_VALUE]).toContain(data)
+			expect(Number.isInteger(data)).toBeTruthy()
 		})
 	})
 

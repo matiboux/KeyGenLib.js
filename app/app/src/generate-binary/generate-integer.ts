@@ -9,5 +9,8 @@ import { generateNumber } from './generate-number'
  */
 export function generateInteger(min: number, max: number): number
 {
+	min = Math.ceil(min)
+	max = Math.floor(max)
+
 	return Math.floor(generateNumber(min, max + 1))
 }
