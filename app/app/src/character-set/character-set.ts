@@ -15,6 +15,7 @@ export function getCharacterSet(
 	lowercase: boolean = DEFAULT_PARAMETERS.lowercase,
 	uppercase: boolean = DEFAULT_PARAMETERS.uppercase,
 	special: boolean = DEFAULT_PARAMETERS.special,
+	removeDuplicates: boolean = true,
 ): string
 {
 	let characterSet = ''
@@ -23,6 +24,12 @@ export function getCharacterSet(
 	if (lowercase) characterSet += LOWERCASE_SET
 	if (uppercase) characterSet += UPPERCASE_SET
 	if (special) characterSet += SPECIAL_SET
+
+	if (removeDuplicates)
+	{
+		// Use Set to remove duplicate characters and convert back to string
+		characterSet = Array.from(new Set(characterSet.split(''))).join('')
+	}
 
 	return characterSet
 }
