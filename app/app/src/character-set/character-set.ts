@@ -8,6 +8,7 @@ import { LOWERCASE_SET, NUMERIC_SET, SPECIAL_SET, UPPERCASE_SET } from './charac
  * @param lowercase - Include lowercase letters (default: true).
  * @param uppercase - Include uppercase letters (default: true).
  * @param special - Include special characters (default: false).
+ * @param removeDuplicates - Remove duplicate characters (default: true).
  * @returns The generated character set as a string.
  */
 export function getCharacterSet(
