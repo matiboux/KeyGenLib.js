@@ -3,7 +3,7 @@ import KeyGenLib from '/KeyGenLib'
 
 test('generates like a CD-key component', () =>
 	{
-		const KeyGen = new KeyGenLib()
+		const keygen = new KeyGenLib()
 		const parameters = {
 			numeric: true,
 			lowercase: false,
@@ -12,6 +12,8 @@ test('generates like a CD-key component', () =>
 			length: 16,
 			redundancy: true,
 		}
-		KeyGen.setParameters(parameters)
-		expect(KeyGen.generateKeygen()).toBeTruthy()
+		keygen.setParameters(parameters)
+		const key = keygen.generateKeygen()
+		expect(key).toBeTruthy()
+		expect(key).toMatch(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)
 	})

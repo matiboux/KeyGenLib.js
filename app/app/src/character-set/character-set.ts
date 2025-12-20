@@ -1,36 +1,83 @@
-import { DEFAULT_PARAMETERS } from './default-parameters'
-import { LOWERCASE_SET, NUMERIC_SET, SPECIAL_SET, UPPERCASE_SET } from './character-set-consts'
+import { CharacterSetFlags } from '~/character-set/character-set-flags.enum'
+import { SymbolSetFlags } from '~/character-set/symbol-set-flags.enum'
+import { getSymbolSet } from '~/character-set/symbol-set'
 
 /**
  * Generates a character set based on the provided options.
  *
- * @param numeric - Include numeric characters (default: true).
- * @param lowercase - Include lowercase letters (default: true).
- * @param uppercase - Include uppercase letters (default: true).
- * @param special - Include special characters (default: false).
- * @param removeDuplicates - Remove duplicate characters (default: true).
+ * @param characterSet - The character set flags or string to use (default: lowercase, uppercase, numeric).
+ * @param symbolSet - The symbol set flags or string to use.
  * @returns The generated character set as a string.
  */
 export function getCharacterSet(
-	numeric: boolean = DEFAULT_PARAMETERS.numeric,
-	lowercase: boolean = DEFAULT_PARAMETERS.lowercase,
-	uppercase: boolean = DEFAULT_PARAMETERS.uppercase,
-	special: boolean = DEFAULT_PARAMETERS.special,
-	removeDuplicates: boolean = true,
+	characterFlags: CharacterSetFlags = CharacterSetFlags.Lowercase | CharacterSetFlags.Uppercase | CharacterSetFlags.Numeric,
 ): string
 {
-	let characterSet = ''
+	// if (typeof characterFlags === 'string')
+	// {
+	// 	if (symbolFlags !== undefined)
+	// 	{
+	// 		if (typeof symbolFlags === 'string')
+	// 		{
+	// 			return Array.from(new Set(characterFlags + symbolFlags)).join('')
+	// 		}
 
-	if (numeric) characterSet += NUMERIC_SET
-	if (lowercase) characterSet += LOWERCASE_SET
-	if (uppercase) characterSet += UPPERCASE_SET
-	if (special) characterSet += SPECIAL_SET
+	// 		const symbolSet = getSymbolSet(symbolFlags)
+	// 		return Array.from(new Set(characterFlags + symbolSet)).join('')
+	// 	}
 
-	if (removeDuplicates)
+	// 	return Array.from(new Set(characterFlags)).join('')
+	// }
+
+	const characterSet: Set<string> = new Set()
+
+	if ((characterFlags & CharacterSetFlags.Lowercase) === CharacterSetFlags.Lowercase)
 	{
-		// Use Set to remove duplicate characters and convert back to string
-		characterSet = Array.from(new Set(characterSet.split(''))).join('')
+		for (const character of 'abcdefghijklmnopqrstuvwxyz')
+		{
+			characterSet.add(character)
+		}
 	}
 
-	return characterSet
+	if ((characterFlags & CharacterSetFlags.Uppercase) === CharacterSetFlags.Uppercase)
+	{
+		for (const character of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+		{
+			characterSet.add(character)
+		}
+	}
+
+	if ((characterFlags & CharacterSetFlags.Numeric) === CharacterSetFlags.Numeric)
+	{
+		for (const character of '0123456789')
+		{
+			characterSet.add(character)
+		}
+	}
+
+	if ((characterFlags & CharacterSetFlags.Special) === CharacterSetFlags.Special)
+	{
+		if (typeof symbolFlags === 'string')
+		{
+			for (const character of symbolFlags)
+			{
+				characterSet.add(character)
+			}
+		}
+		else
+		{
+			if (symbolFlags === undefined)
+			{
+				symbolFlags = SymbolSetFlags.Default
+			}
+
+			const symbolSet = getSymbolSet(symbolFlags)
+			for (const character of symbolSet)
+			{
+				characterSet.add(character)
+			}
+		}
+	}
+
+	return Array.from(characterSet).join('')
 }
